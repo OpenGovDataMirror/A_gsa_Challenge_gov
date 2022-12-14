@@ -1,0 +1,54 @@
+<div class="display-flex flex-row flex-justify">
+  <h5 id="general">General Info</h5>
+  <%= render("_edit_button.html", user: @user, challenge: @challenge, route: Routes.challenge_path(@conn, :edit, @challenge.id, "general")) %>
+</div>
+<br/>
+<dt>Managers</dd>
+<dd>
+  <ul>
+    <%= Enum.map(@challenge.challenge_managers, fn manager -> %>
+      <%= if is_nil(manager.revoked_at) do %>
+        <li><%= Web.UserView.name_link(@conn, manager.user) %></li>
+      <% end %>
+    <% end) %>
+  </ul>
+</dd>
+<br/>
+<div>
+  <div class="text-bold">Challenge manager of record:</div>
+  <div><%= @challenge.challenge_manager %></div>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Challenge manager email:</div>
+  <div><%= @challenge.challenge_manager_email %></div>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Point of contact email:</div>
+  <div><%= @challenge.poc_email %></div>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Lead agency:</div>
+  <div><%= agency_name(@challenge) %></div>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Federal partners:</div>
+  <%= Enum.map(@challenge.federal_partners, fn partner -> %>
+    <div><%= agency_name(partner) %></div>
+  <% end) %>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Non federal partners:</div>
+  <%= Enum.map(@challenge.non_federal_partners, fn partner -> %>
+    <div><%= partner.name %></div>
+  <% end) %>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Fiscal year:</div>
+  <%= @challenge.fiscal_year %>
+</div>

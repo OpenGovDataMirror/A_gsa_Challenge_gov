@@ -1,0 +1,111 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= if Accounts.is_solver?(@user) do %>
+      <%= SharedView.render_breadcrumbs([
+        %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+        %{text: "Submissions", route: Routes.submission_path(@conn, :index)},
+        %{text: @submission.title || "draft"}
+      ])%>
+    <% else %>
+      <%= SharedView.render_breadcrumbs([
+        %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+        %{text: "Challenges", route: Routes.challenge_path(@conn, :index)},
+        %{text: @challenge.title, route: Routes.challenge_path(@conn, :show, @challenge.id)},
+        %{text: "Phases", route: Routes.challenge_phase_path(@conn, :index, @challenge.id), is_visible: length(@challenge.phases) > 1},
+        %{text: @phase.title, route: Routes.challenge_phase_path(@conn, :show, @challenge.id, @phase.id), is_visible: length(@challenge.phases) > 1},
+        %{text: "Submissions", route: Routes.challenge_phase_path(@conn, :show, @challenge.id, @phase.id), is_visible: length(@challenge.phases) === 1},
+        %{text: @submission.title || "draft"}
+      ])%>
+    <% end %>
+  </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card p-3">
+          <%= render Web.SubmissionView, "_header.html", conn: @conn, user: @user, challenge: @submission.challenge, phase: @phase %>
+          <section>
+            <%= if Challenges.allowed_to_edit?(@user, @challenge) do %>
+              <div class="form-group">
+                <label class="col"><strong>Submission ID:</strong></label>
+                <div class="col"><%= @submission.id %></div>
+              </div>
+            <% end %>
+            <div class="form-group">
+              <label class="col"><strong>Title:</strong></label>
+              <div class="col"><%= @submission.title %></div>
+            </div>
+            <div class="form-group">
+              <label class="col"><strong>Brief description:</strong></label>
+              <div class="col ql-editor editor-text-submissions"><%= SharedView.render_safe_html(@submission.brief_description) %></div>
+            </div>
+            <div class="form-group">
+              <label class="col"><strong>Description:</strong></label>
+              <div class="col ql-editor editor-text-submissions"><%= SharedView.render_safe_html(@submission.description) %></div>
+            </div>
+            <%= if @submission.external_url do %>
+              <div class="form-group">
+                <label class="col"><strong>External URL:</strong></label>
+                <div class="col"><%= SharedView.string_to_link(@submission.external_url, target: "_blank") %></div>
+              </div>
+            <% end %>
+
+            <%= if length(@submission.documents) > 0 do %>
+              <div class="form-group">
+                <label class="col"><strong>Uploaded files:</strong></label>
+                <div class="col">
+                  <div class="submission-documents-list">
+                    <%= Enum.map(@submission.documents, fn document -> %>
+                      <div class="row submission-document-row">
+                        <div class="col"><%= link(DocumentView.name(document), to: ChallengeGov.SubmissionDocuments.download_document_url(document), target: "_blank", class: "js-confirm-download") %></div>
+                      </div>
+                    <% end) %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+            <div class="form-group">
+              <label class="col"><strong>Status:</strong></label>
+              <div class="col"><%= status_display_name(@submission) %></div>
+            </div>
+
+            <%= if @submission.manager_id == @user.id do %>
+              <div class="form-group">
+                <label class="col"><strong>Contact email:</strong></label>
+                <div class="col"><%= SharedView.mailto_link(@submission.submitter.email) %></div>
+              </div>
+            <% end %>
+
+            <div class="form-group">
+              <label class="col"><strong>Last updated date:</strong></label>
+              <div class="col"><%= SharedView.local_datetime_tag(@submission.updated_at) %></div>
+            </div>
+
+            <%= submission_delete_link(@conn, @submission, @user, label: "Delete") %>
+            <%= submission_edit_link(@conn, @submission, @user, label: "Edit") %>
+            <%= submit_button(@conn, @submission, @user, label: "Submit") %>
+
+          </section>
+        </div>
+        <%= if Accounts.has_admin_access?(@user) do %>
+          <div class="col mb-4">
+            <%= link "< Back to submissions", to: Routes.challenge_phase_path(@conn, :show, @challenge.id, @phase.id, page: @page, filter: @filter, sort: @sort) %>
+          </div>
+        <% end %>
+        <%= if Accounts.is_solver?(@user) do %>
+          <div class="col mb-4">
+            <%= link "< Back to submissions", to: Routes.submission_path(@conn, :index, filter: @filter, sort: @sort) %>
+          </div>
+        <% end %>
+        <%= if Accounts.is_challenge_manager?(@user) do %>
+          <div class="col mb-4">
+            <%= link "< Back to submissions", to: Routes.challenge_phase_path(@conn, :show, @challenge.id, @phase.id) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

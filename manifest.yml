@@ -1,0 +1,51 @@
+---
+defaults: &defaults
+  buildpacks:
+    - https://github.com/HashNuke/heroku-buildpack-elixir
+  memory: 512M
+  disk_quota: 2G
+  health-check-type: process
+  command: ./cloud_start.sh
+
+applications:
+- name: challenge-portal-dev
+  <<: *defaults
+  instances: 1
+  disk_quota: 6GB
+  env:
+    MIX_ENV: prod
+    HOST: challenge-portal-dev.app.cloud.gov
+    LOGIN_PRIVATE_KEY_PATH: dev_key.pem
+    LOGIN_PUBLIC_KEY_PATH: dev_cert.pem
+    LOGIN_REDIRECT_URL: https://challenge-portal-dev.app.cloud.gov/auth/result
+    LOGIN_IDP_AUTHORIZE_URL: https://idp.int.identitysandbox.gov/openid_connect/authorize
+    LOGIN_TOKEN_ENDPOINT: https://idp.int.identitysandbox.gov/api/openid_connect/token
+    LOGIN_CLIENT_ID: urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:challenge_gov_portal_dev
+
+- name: challenge-portal-stg
+  <<: *defaults
+  instances: 2
+  env:
+    MIX_ENV: prod
+    HOST: challenge-portal-staging.app.cloud.gov
+    LOGIN_PRIVATE_KEY_PATH: staging_key.pem
+    LOGIN_PUBLIC_KEY_PATH: staging_cert.pem
+    LOGIN_REDIRECT_URL: https://challenge-portal-staging.app.cloud.gov/auth/result
+    LOGIN_IDP_AUTHORIZE_URL: https://idp.int.identitysandbox.gov/openid_connect/authorize
+    LOGIN_TOKEN_ENDPOINT: https://idp.int.identitysandbox.gov/api/openid_connect/token
+    LOGIN_CLIENT_ID: urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:challenge_portal_staging
+
+- name: challenge-portal-production
+  <<: *defaults
+  instances: 2
+  memory: 1G
+  env:
+    MIX_ENV: prod
+    HOST: portal.challenge.gov
+    LOGIN_PRIVATE_KEY_PATH: production_key.pem
+    LOGIN_PUBLIC_KEY_PATH: production_cert.pem
+    LOGIN_REDIRECT_URL: https://portal.challenge.gov/auth/result
+    LOGIN_IDP_AUTHORIZE_URL: https://secure.login.gov/openid_connect/authorize
+    LOGIN_TOKEN_ENDPOINT: https://secure.login.gov/api/openid_connect/token
+    LOGIN_CLIENT_ID: urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:challenge_portal_production
+    PUBLIC_ROOT_URL: https://www.challenge.gov

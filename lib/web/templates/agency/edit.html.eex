@@ -1,0 +1,29 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Agencies", route: Routes.agency_path(@conn, :index)},
+      %{text: @agency.name, route: Routes.agency_path(@conn, :show, @agency.id)},
+      %{text: "Edit"}
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          <%= edit_title(@agency) %> <%= @agency.name %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <%= render Web.AgencyView, "_form.html", changeset: @changeset, data: @changeset.data, parent_id: @agency.parent_id, path: Routes.agency_path(@conn, :update, @agency.id) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

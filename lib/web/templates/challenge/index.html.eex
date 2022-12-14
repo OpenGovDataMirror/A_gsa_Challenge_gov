@@ -1,0 +1,61 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Challenges"},
+    ])%>
+    <%# if pending, show pending title %>
+    <%= if length(@pending_challenges) > 0 && Accounts.has_admin_access?(@user) do %>
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 text-dark">
+            <span>Pending Challenges</span>
+          </h1>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= if length(@pending_challenges) > 0 && Accounts.has_admin_access?(@user) do %>
+  <%= render Web.ChallengeView, "_pending_challenges.html", conn: @conn, user: @user, challenges: @pending_challenges, pagination: @pending_pagination, sort: %{}, filter: %{} %>
+<% end %>
+
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          <span>All Challenges</span>
+          <div class="btn-group">
+            <%= link "New", to: Routes.challenge_path(@conn, :new, show_info: true), class: "btn btn-primary" %>
+          </div>
+          <a class="btn btn-info" data-widget="control-sidebar" href="#">Filter</a>
+          <%= if is_map(@filter) && map_size(@filter) > 0 do %>
+            <%= link "clear filters", to: Routes.challenge_path(@conn, :index), class: "btn btn-link" %>
+          <% end %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div id="challenges" class="col-sm-12">
+        <section id="active-challenges" style="margin-bottom: 20px;">
+          <h4 style="margin-bottom: 15px; padding-left: 12px;"><strong>Active</strong></h4>
+          <%= render Web.ChallengeView, "_challenge_table.html", conn: @conn, user: @user, challenges: @challenges.published, sort: @sort, filter: @filter, sortable: true %>
+        </section>
+        <section id="draft-challenges" style="margin-bottom: 20px;">
+          <h4 style="margin-bottom: 15px; padding-left: 12px;"><strong>Drafts</strong></h4>
+          <%= render Web.ChallengeView, "_challenge_table.html", conn: @conn, user: @user, challenges: @challenges.draft, sort: @sort, filter: @filter, sortable: true %>
+        </section>
+        <section id="archived-challenges" style="margin-bottom: 20px;">
+          <h4 style="margin-bottom: 15px; padding-left: 12px;"><strong>Closed and Archived</strong></h4>
+          <%= render Web.ChallengeView, "_challenge_table.html", conn: @conn, user: @user, challenges: @challenges.archived, sort: @sort, filter: @filter, sortable: true %>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

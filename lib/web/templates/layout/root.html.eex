@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>    
+    <link rel="icon" type="image/png" href="<%= Routes.static_path(Web.Endpoint, "/images/favicon.png") %>" />
+
+    <link rel="stylesheet" href="<%= Routes.static_path(Web.Endpoint, "/css/app.css") %>"/>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+
+    <title>Challenge.Gov</title>
+
+    <meta property="og:description" content="Challenge.Gov empowers federal agencies to engage public solvers in challenges and prize competitions to identify innovative solutions to critical issues." />
+
+    <meta property="og:image" content="https://challenge-portal-dev.app.cloud.gov/images/challenge-logo-small-ac86bd43b87671f7ff2531f2f4452982.png?vsn=d">
+
+    <meta property="og:title" content="Challenge.Gov">
+
+    <meta name="twitter:card" content="summary_large_image">
+
+    <meta property="og:url" content="https://www.challenge.gov/">
+
+    <meta property="og:type" content="website">
+
+    <meta name="csrf-token" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
+  </head>
+
+  <body class="hold-transition sidebar-collapse sidebar-mini">
+    <div class="wrapper usa-prose">
+        <%= @inner_content %>
+    </div>
+
+    <script type="text/javascript" src="<%= Routes.static_path(Web.Endpoint, "/js/app.js") %>"></script>
+  </body>
+</html>

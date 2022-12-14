@@ -1,0 +1,23 @@
+<%= form_for(@changeset, @path, [class: "form-horizontal", multipart: true], fn f -> %>
+  <div class="card-body">
+    <%= FormView.rt_textarea_field(f, :content) %>
+    <%= if @section === "site_wide_banner" do %>
+      <div class="w-25 d-flex">
+        <div class="me-4">
+          <label class="control-label">Start date</label>
+          <%= ChallengeView.date_and_time_inputs(@conn, f, :start_date, "Start date", "site_banner_start") %>
+          <%= hidden_input(f, :start_date, label: "Start date") %>
+        </div>
+        <div>
+          <label class="control-label">End date</label>
+          <%= ChallengeView.date_and_time_inputs(@conn, f, :end_date, "End date", "site_banner_end") %>
+          <%= hidden_input(f, :end_date, label: "End date") %>
+      </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card-footer">
+    <%= submit("Submit", class: "btn btn-primary pull-right") %>
+  </div>
+<% end) %>

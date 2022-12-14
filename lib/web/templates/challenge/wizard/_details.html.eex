@@ -1,0 +1,248 @@
+<%= hidden_input @form, :types, value: [] %>
+
+<h4>Add challenge details</h4>
+<br/>
+<p class="form__note"><span class="form__note--red">*</span>Required field</p>
+  <%= FormView.text_field(@form, :title, label: "Challenge title (90 character limit)", limit: 90, required: true) %>
+  <p class="ms-2 text-muted">Provide the official title of your challenge. Your challenge title will appear in your challenge’s listing tile on the Challenge.gov homepage.</p>
+<br/>
+
+<%= FormView.text_field(@form, :tagline, label: "Tagline (90 character limit)", limit: 90, required: true) %>
+<p class="ms-2 text-muted">Provide a clear one-sentence call to action for solvers - essentially your challenge’s headline. It is required that taglines be limited to 90 characters or less. The tagline will also appear at the top of your individual challenge page, and on the challenge preview tile.</p>
+
+<br/>
+<hr/>
+<br/>
+
+<%= FormView.select_field(@form, :primary_type, collection: Challenges.challenge_types(), class: "js-challenge-type form-select", label: "Primary challenge type (select from list)", prompt: "", required: false) %>
+<p class="ms-2 text-muted">Select a category that best describes your challenge.</p>
+<div class="<%= FormView.form_group_classes(@form, :types) %>">
+  <label for="challenge_types" class="form-label col">Additional challenge type <em>(optional)</em></label>
+  <div class="col">
+    <select id="challenge_types" class="js-select form-select js-challenge-type <%= FormView.form_control_classes(@form, :types) %>" name="challenge[types][]">
+      <option></option>
+      <%= options_for_select(Challenges.challenge_types, Enum.at(@changeset.data.types || [], 0)) %>
+    </select>
+    <%= error_tag(@form, :types) %>
+  </div>
+</div>
+
+<br/>
+
+<div class="<%= FormView.form_group_classes(@form, :types) %>">
+  <label for="challenge_types" class="col">Additional challenge type <em>(optional)</em></label>
+  <div class="col">
+    <select id="challenge_types" class="js-select js-challenge-type form-select <%= FormView.form_control_classes(@form, :types) %>" name="challenge[types][]">
+      <option></option>
+      <%= options_for_select(Challenges.challenge_types, Enum.at(@changeset.data.types || [], 1)) %>
+    </select>
+    <%= error_tag(@form, :types) %>
+  </div>
+</div>
+
+<br/>
+
+<div class="<%= FormView.form_group_classes(@form, :types) %>">
+  <label for="challenge_types" class="col">Additional challenge type <em>(optional)</em></label>
+  <div class="col">
+    <select id="challenge_types" class="js-select js-challenge-type <%= FormView.form_control_classes(@form, :types) %>" name="challenge[types][]">
+      <option></option>
+      <%= options_for_select(Challenges.challenge_types, Enum.at(@changeset.data.types || [], 2)) %>
+    </select>
+    <%= error_tag(@form, :types) %>
+  </div>
+</div>
+
+<br/>
+
+<%= FormView.text_field(@form, :other_type, label: "Other challenge type (optional) (45 character limit)", limit: 45) %>
+<p class="ms-2 text-muted">Free type a category that best describe your challenge</p>
+
+<br/>
+<hr/>
+<br/>
+
+<div class="mb-3">
+  <%= label @form, :custom_url, "Custom url (optional)", class: "col-md-4" %>
+
+  <div>
+    <p class="text-muted">
+      URLs will be formatted as follows: https://www.challenge.gov/?challenge={challenge-specific-identifier}. By default the challenge specific identifier will be the challenge name.
+      <br/>
+      You can set a custom challenge specific identifier in the box below. Only use alphanumeric characters and hyphens (-). Inclusion of other characters will cause the URL to be invalid and will be removed.
+    </p>
+    <span><%= ChallengeView.public_details_root_url() %></span><span id="custom-url-example"></span>
+  </div>
+  <%= FormView.text_field(@form, :custom_url, label: nil, placeholder: "my-custom-challenge-name") %>
+</div>
+
+<br/>
+
+<%= if Accounts.has_admin_access?(@user) do %>
+  <div class="mb-3">
+    <%= FormView.text_field(@form, :short_url, label: "Short url (optional)", placeholder: "https://go.usa.gov/lmnop") %>
+    <p class="text-muted">The short url will be used for social media and posting purposes.</p>
+  </div>
+  <br/>
+<% end %>
+
+
+<%= FormView.text_field(@form, :external_url, label: "“Tile Only” listing – Enter external website link (not recommended)") %>
+<p class="ms-2 text-muted"><strong>NOTE</strong>: Entering an external website link here will create a “tile only” listing and will automatically redirect potential solvers from your challenge tile on Challenge.Gov to this link.</p>
+
+<br/>
+<hr/>
+<br/>
+
+<div class="col">
+  <%= FormView.text_field(@form, :brief_description, label: "Short description (200 character limit)", limit: 200) %>
+  <p class="ms-2 text-muted">Provide a general overview of your challenge, including any background on the problem you’re trying to solve.</p>
+</div>
+
+<br/>
+
+<div class="col">
+  <label>Long description<span class="required">*</span></label>
+  <%= FormView.rt_textarea_field(@form, :description) %>
+  <p class="ms-2 text-muted">Provide a detailed overview of your challenge, including any background on the problem you’re trying to solve, and any key dates you want to highlight.</p>
+</div>
+
+<br/>
+<hr/>
+<br/>
+
+<div class="challenge-file-upload col" data-section=<%= @section %>>
+  <label class="control-label">Upload additional description materials (optional)</label>
+  <div class="col">
+    <label for="challenge_document_name" class="control-label">File name (optional)</label>
+    <input class="challenge_document_name form-control" type="text">
+    <br/>
+    <input class="challenge_document_file form-file-control" type="file">
+    <div class="challenge_document_upload btn btn-primary">Upload file</div>
+    <div class="challenge_document_upload_error invalid-feedback">File must be a .pdf, .txt, .csv, .jpg, .png, or .tiff</div>
+    <small class="form-text text-muted font-italic">Allowed file types: .pdf, .txt, .csv, .jpg, .png, or .tiff</small>
+  </div>
+  <p class="ms-2 mt-2 text-muted">Provide any tables, PDFs or other resources you wish to be included as a resource for the public solvers.</p>
+
+  <div class="challenge_uploaded_documents">
+    <%= Enum.map(@documents, fn document -> %>
+      <div class="challenge_uploaded_document">
+        <i class="fa fa-paperclip me-1"></i>
+        <%= link(Web.DocumentView.name(document), to: SupportingDocuments.download_document_url(document), target: "_blank", class: "js-confirm-download") %>
+        <%= link to: "", data: [document_id: document.id], class: "challenge_uploaded_document_delete" do %>
+          <i class="fa fa-trash"></i>
+        <% end %>
+      </div>
+    <% end) %>
+  </div>
+</div>
+
+<br/>
+<hr/>
+<br/>
+
+<div class="col logo-section">
+  <label class="control-label"><%= FormView.label_field @form, :upload_logo, label: "Upload challenge logo", required: true %></label>
+  <div class="ms-3">
+    <p class="ms-2 text-muted">
+      Optimal size for display on Challenge.Gov is 341x160 px. If you don’t have a logo, your challenge will display with your agency seal.
+    </p>
+    <div class="col upload-logo">
+      <div class="row">
+        <%= label class: "control-label" do %>
+          <%= radio_button(@form, :upload_logo, true, class: "me-2", required: true) %>
+          Upload my own logo (341 x 160 px)
+        <% end %>
+      </div>
+      <div class="row logo-file-field collapse">
+        <div class="d-flex flex-column">
+          <%= FormView.file_field(@form, :logo, label: false, required: true, class: "col-md-10") %>
+          <small class="form-text text-muted font-italic mt-0 mb-2 col">Allowed file types: .jpg, .jpeg, .png, .gif</small>
+          <%= FormView.text_field(@form, :logo_alt_text, label: "Add custom alt text (optional)", class: "col-md-10") %>
+          <small class="form-text text-muted font-italic mt-0 col">Please be desciptive of the image. If no custom text is provided, alt text will be 'Challenge logo'</small>
+          <br/>
+          <br/>
+        </div>
+      </div>
+      <div class="row">
+        <%= label class: "control-label" do %>
+          <%= radio_button(@form, :upload_logo, false, class: "me-2", required: true) %>
+          Use agency seal
+        <% end %>
+      </div>
+    </div>
+    <%= if @data.logo_key do %>
+      <p>Current logo:</p>
+      <%= logo_img(@data, height: 100) %>
+      <br/>
+    <% end %>
+  </div>
+</div>
+
+<br/>
+<hr/>
+<br/>
+
+<h4 class="publish-date-section">Publish date</h4>
+<p class="ms-2 text-muted">
+  Once your challenge is approved, your challenge will be listed on Challenge.gov based on the date you specify.
+  Please allow up to <b>one to two business days</b> for approval and publishing of your content. Use this format: MM/DD/YYYY TIME OF DAY (Example: 06/19/2020 05:00 PM).
+</p>
+
+<label class="control-label col-md-4">
+  Schedule a publish date and time
+  <span class="required">*</span>
+</label>
+<div class="col">
+  <div class="<%= FormView.form_group_classes(@form, :auto_publish_date) %>">
+    <%= date_and_time_inputs(@conn, @form, :auto_publish_date, "Publish date", "challenge_auto_publish") %>
+    <%= hidden_input(@form, :auto_publish_date, label: "Publish date") %>
+    <%= error_tag(@form, :auto_publish_date) %>
+    <br/>
+    <small class="form-text text-muted font-italic">All times listed in local timezone</small>
+  </div>
+</div>
+
+<br/>
+<hr/>
+<br/>
+
+<h4 class="multi-phase-section">Is this a multi-phase challenge?</h4>
+<p class="ms-2 text-muted">
+  A multiphase challenge has a series of separate phases each consisting of, for example, submission intake, judging, and participant selection.
+<br/>
+  <b>Submission Start:</b> Provide time and date for when your challenge opens for submissions. Use this format: MM/DD/YYYY TIME OF DAY (Example: 06/19/2020 05:00 PM).  Note: All times will be listed on the site in the users local time.
+<br/>
+  <b>Submission End:</b> Provide time and date for your submission deadline. Use this format: MM/DD/YYYY TIME OF DAY (Example: 06/19/2020 05:00 PM).  Note: All times will be listed on the site in the users local time.
+</p>
+<p>
+  Example: Phase One -- Ideas, Phase Two -- Prototyping, Phase Three -- Demonstration of Final Product
+</p>
+
+<div class="mb-3">
+  <label class="control-label col-md-4"><%= FormView.label_field(@form, :multi_phase, label: "This challenge contains multiple phases", required: true) %></label>
+  <div class="col ms-2">
+    <div class="multi-phase-toggle">
+      <div class="row">
+        <%= label class: "control-label" do %>
+          <%= radio_button(@form, :is_multi_phase, true, class: "me-2", required: true) %>
+          Yes
+        <% end %>
+      </div>
+      <div class="row">
+        <%= label class: "control-label" do %>
+          <%= radio_button(@form, :is_multi_phase, false, class: "me-2", required: true) %>
+          No
+        <% end %>
+      </div>
+    </div>
+    <div>
+      <%= error_tag @form, :phase_dates, "callout callout-danger bg-red d-block my-3" %>
+    </div>
+    <br/>
+
+    <%= existing_phase_data_boolean(@form) %>
+    <%= render Web.ChallengeView, "phases/_single_phase.html", conn: @conn, form: @form %>
+    <%= render Web.ChallengeView, "phases/_multi_phase.html", conn: @conn, form: @form %>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="display-flex flex-row flex-justify">
+  <h5 id="resources">Resources</h5>
+   <%= render("_edit_button.html", user: @user, challenge: @challenge, route: Routes.challenge_path(@conn, :edit, @challenge.id, "resources")) %>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Resource banner:</div>
+  <%= resource_banner_img(@challenge) %>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Resource documents:</div>
+  <%= Enum.map(documents_for_section(@challenge.supporting_documents, "resources"), fn document -> %>
+    <div><%= link(Web.DocumentView.name(document), to: SupportingDocuments.download_document_url(document), target: "_blank", class: "js-confirm-download") %></div>
+  <% end) %>
+</div>
+<br/>
+<div>
+  <div class="text-bold">FAQ documents:</div>
+  <%= Enum.map(documents_for_section(@challenge.supporting_documents, "faq"), fn document -> %>
+    <div><%= link(Web.DocumentView.name(document), to: SupportingDocuments.download_document_url(document), target: "_blank", class: "js-confirm-download") %></div>
+  <% end) %>
+</div>
+<br/>
+<div>
+  <div class="text-bold">Frequently asked questions:</div>
+  <div class="editor-text-reset"><%= SharedView.render_safe_html(@challenge.faq) %></div>
+</div>

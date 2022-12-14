@@ -1,0 +1,30 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Zones", route: Routes.challenge_path(@conn, :index)},
+      %{text: "Challenge ##{@challenge.id}", route: Routes.challenge_path(@conn, :show, @challenge.id)},
+      %{text: "Edit Event"},
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>
+          Editing an Event
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Edit Event</h3>
+        </div>
+
+        <%= render("_form.html", conn: @conn, changeset: @changeset, url: Routes.event_path(@conn, :update, @event.id), save: "Update") %>
+      </div>
+    </div>
+  </div>
+</section>

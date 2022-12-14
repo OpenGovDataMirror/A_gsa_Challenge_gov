@@ -1,0 +1,39 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Challenges", route: Routes.challenge_path(@conn, :index)},
+      %{text: @challenge.title}
+    ])%>
+    <%= render Web.ChallengeView, "_challenge_manager_banner.html", user: @user %>
+    <div class="row">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          Challenge #<%= @challenge.id %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row challenge-show-actions">
+      <div class="col-md-6">
+        <%= render Web.ChallengeView, "show/_status_actions.html", conn: @conn, challenge: @challenge, user: @user %>
+      </div>
+      <div class="col-md-6">
+        <%= render Web.ChallengeView, "show/_other_actions.html", conn: @conn, challenge: @challenge, user: @user %>
+      </div>
+    </div>
+
+    <%= challenge_rejection_message(@challenge) %>
+
+    <%#= render Web.ChallengeView, "show/_internal_info.html", conn: @conn, challenge: @challenge %>
+    <%= render Web.ChallengeView, "show/_winner_info.html", conn: @conn, challenge: @challenge %>
+    <%= render Web.ChallengeView, "show/_info.html", conn: @conn, challenge: @challenge, user: @user %>
+  </div>
+</section>
+
+<%= render Web.ChallengeView, "modals/_announcement_modal.html", conn: @conn, challenge: @challenge %>
+<%= render Web.ChallengeView, "modals/_rejection_modal.html", conn: @conn, challenge: @challenge %>

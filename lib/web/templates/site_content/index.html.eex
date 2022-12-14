@@ -1,0 +1,58 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Site Management"},
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          Site Management
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render Web.SiteContentView, "table/_table.html", conn: @conn, user: @user, site_content: @site_content, pagination: @pagination, sort: @sort, filter: @filter, sortable: true %>
+
+<br/>
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 d-flex">
+        <div class="card nav_card me-5">
+          <div class="card-body d-flex flex-column justify-content-center">
+            <dl class="h-75">
+              <dt>Reporting & Analytics</dt>
+              <dd>Certification and security reports. Upload site analytics reports.</dd>
+              <br>
+            </dl>
+            <%= link "View Reports", to: Routes.reports_path(@conn, :new), class: "btn btn-primary" %>
+          </div>
+        </div>
+        <div class="card nav_card me-5">
+          <div class="card-body d-flex flex-column justify-content-center">
+            <dl class="h-75">
+              <dt>Agencies</dt>
+              <dd>View and manage agencies</dd>
+              <br>
+            </dl>
+            <%= link "View Agencies", to: Routes.agency_path(@conn, :index), class: "btn btn-primary" %>
+          </div>
+        </div>
+        <div class="card nav_card">
+          <div class="card-body d-flex flex-column justify-content-center">
+            <dl class="h-75">
+              <dt>PMO Reports</dt>
+              <dd>View reports</dd>
+              <br>
+            </dl>
+            <%= link "View Reports", to: Routes.reports_path(@conn, :pmo_page), class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+<div id="single-phase-section" class="col single-phase-section collapse">
+  <%= if (Map.has_key?(@form, :data) and length(@form.data.phases) > 0) or
+    (Map.has_key?(@form.source.changes, :phases) and length(@form.source.changes.phases) > 0) do %>
+    <!-- With phases attached or pending -->
+    <%= inputs_for(@form, :phases, [skip_hidden: true], fn phase_form -> %>
+      <%= if phase_form.index > 0 do %>
+        <%= if phase_form.errors[:id] do %>
+          <div class="form-group">
+            <span class="is-invalid"></span>
+            <span class="help-block invalid-feedback">The phase <%= phase_form.data.title %> has submissions and cannot be deleted</span>
+          </div>
+        <% end %>
+      <% end %>
+    <% end) %>
+    <%= inputs_for(@form, :phases, [skip_hidden: true], fn phase_form -> %>
+      <%= if phase_form.index === 0 do %>
+        <%= hidden_input phase_form, :id, class: "id"  %>
+        <%= hidden_input phase_form, :title, value: "" %>
+        <%= hidden_input phase_form, :open_to_submissions, value: true %>
+        <%= hidden_input phase_form, :judging_criteria %>
+        <%= hidden_input phase_form, :judging_criteria_delta %>
+        <%= hidden_input phase_form, :how_to_enter %>
+        <%= hidden_input phase_form, :how_to_enter_delta %>
+
+        <div class="col">
+          <div class="<%= FormView.nested_form_group_classes(@form, :phases, :start_date, phase_form.index) %>">
+            <div class="<%= FormView.form_group_classes(phase_form, :start_date) %>">
+              <%= label phase_form, :start_date, "Submission start date and time" %>
+              <span class="required">*</span>
+              <div>
+                <%= date_and_time_inputs(@conn, @form, :start_date, "Start date", "challenge_phases_0_start") %>
+                <%= hidden_input(phase_form, :start_date, label: "Start date") %>
+              </div>
+              <%= error_tag(phase_form, :start_date) %>
+            </div>
+          </div>
+
+          <div class="<%= FormView.nested_form_group_classes(@form, :phases, :end_date, phase_form.index) %>">
+            <div class="<%= FormView.form_group_classes(phase_form, :end_date) %>">
+              <%= label phase_form, :end_date, "Submission end date and time" %>
+              <span class="required">*</span>
+              <div>
+                <%= date_and_time_inputs(@conn, @form, :end_date, "End date", "challenge_phases_0_end") %>
+                <%= hidden_input(phase_form, :end_date, label: "End date") %>
+              </div>
+              <%= error_tag(phase_form, :end_date) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end) %>
+  <% else %>
+    <!-- With no phases pending or attached -->
+    <input id="challenge_phases_0_title" name="challenge[phases][0][title]" type="hidden" value="">
+    <input id="challenge_phases_0_open_to_submissions" name="challenge[phases][0][open_to_submissions]" type="hidden" value="true">
+
+    <div class="col">
+      <div class="form-group nested-form-group">
+        <div class="form-group">
+          <label for="challenge_phases_0_start_date">Phase 1 submission start date and time</label><span class="required">*</span>
+          <%= date_and_time_inputs(@conn, @form, :start_date, "Phase 1 submission end date and time *", "challenge_phases_0_start") %>
+          <input id="challenge_phases_0_start_date" label="Start date" name="challenge[phases][0][start_date]" type="hidden">
+        </div>
+      </div>
+
+      <div class="form-group nested-form-group">
+        <div class="form-group">
+          <label for="challenge_phases_0_start_date">Phase 1 submission end date and time *</label>
+          <%= date_and_time_inputs(@conn, @form, :end_date, "Phase 1 submission end date and time *", "challenge_phases_0_end") %>
+          <input id="challenge_phases_0_end_date" label="End date" name="challenge[phases][0][end_date]" type="hidden">
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <small class="form-text text-muted font-italic mt-3">All times listed in local timezone</small>
+</div>

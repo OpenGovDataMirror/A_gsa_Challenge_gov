@@ -1,0 +1,39 @@
+<footer class="footer">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10 footer__left">
+        <img src='<%= Routes.static_path(@conn, "/images/challenge-logo-white.png") %>' alt="Challenge Gov Logo" title="Challenge Gov" class="footer__challenge-logo">
+        <hr/>
+        <div class="row">
+          <div class="col">
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">USA.gov</a>
+          </div>
+          <div class="col">
+            <a href="#">Agency toolkit</a>
+            <a href="#">Archived challenges</a>
+          </div>
+          <div class="col">
+            <a href="#">Terms</a>
+            <a href="#">Privacy policy</a>
+          </div>
+          <div class="col">
+            <div class="row footer__social_links">
+              <a href="https://twitter.com/ChallengeGov" class="footer__social_link" target="_blank" rel="noopener">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="https://www.facebook.com/ChallengeGov" class="footer__social_link" target="_blank" rel="noopener">
+                <i class="fab fa-facebook"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2 footer__right">
+        <img src='<%= Routes.static_path(@conn, "/images/challenge-logo-square-white.svg") %>' alt="Challenge Gov Logo Square" title="Challenge Gov" class="footer__challenge-logo-square">
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,73 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Users"},
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          <span style="color:#C5221F">Admin Action Required</span>
+          <a class="btn btn-info" data-widget="control-sidebar" href="#">Search</a>
+          <%= if is_map(@filter) && map_size(@filter) > 0 do %>
+            <%= link "Clear search", to: Routes.user_path(@conn, :index), class: "btn btn-link" %>
+          <% end %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= if length(@users_requiring_action) > 0 do %>
+  <%= render Web.UserView, "_users_table.html", conn: @conn, current_user: @current_user, users: @users_requiring_action %>
+  <br/>
+<% end%>
+
+<section class="content">
+  <div class="row mb-2">
+    <div class="col-sm-6">
+      <h1 class="m-0 text-dark">
+        <span>User List</span>
+      </h1>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= Enum.map @users, fn (user) -> %>
+                  <tr>
+                    <td><%= user.id %></td>
+                    <td><%= link(AccountView.full_name(user), to: Routes.user_path(@conn, :show, user.id)) %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.role %></td>
+                    <td><%= status(user.status) %></td>
+                    <td>
+                      <%= link("View", to: Routes.user_path(@conn, :show, user.id), class: "btn btn-info") %>
+                      <%= user_edit_link(@conn, user, @current_user) %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <%= SharedView.pagination(path: Routes.user_path(@conn, :index), pagination: @pagination) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

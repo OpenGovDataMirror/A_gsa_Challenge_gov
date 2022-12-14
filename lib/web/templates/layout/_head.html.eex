@@ -1,0 +1,16 @@
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="<%= Routes.static_path(@conn, "/images/favicon.png") %>" />
+  <link href="https://fonts.googleapis.com/css?family=Teko" rel="stylesheet">
+
+  <title><%= page_title(@conn) %></title>
+
+  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/layout.css") %>"/>
+  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/public.css") %>"/>
+
+  <meta name="csrf-token" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
+
+  <%= recaptcha_script() %>
+</head>

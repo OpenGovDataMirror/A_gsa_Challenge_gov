@@ -1,0 +1,67 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Site Management", route: Routes.site_content_path(@conn, :index)},
+      %{text: @content.section}
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          Content <%= @content.section %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-tools">
+              <%= link("Edit", to: Routes.site_content_path(@conn, :edit, @content.section), class: "btn btn-default me-2") %>
+            </div>
+          </div>
+          <div class="card-body">
+            <dt>Section</dt>
+            <dd><%= @content.section %></dd>
+            <br/>
+
+            <dt>Content</dd>
+            <dd>
+              <div class="editor-text-reset"><%= SharedView.render_safe_html(@content.content) %></div>
+            </dd>
+            <br/>
+
+            <div class="d-flex">
+              <%= if @content.section === "site_wide_banner" and @content.start_date do %>
+                <div class="me-4">
+                  <dt>
+                    <span class="text-bold">Start date: </span>
+                  </dt>
+                  <dd>
+                    <span class="js-local-datetime"><%= @content.start_date %></span>
+                  </dd>
+                </div>
+              <% end %>
+
+              <%= if @content.section === "site_wide_banner" and @content.end_date do %>
+                <div>
+                  <dt>
+                    <span class="text-bold">End date: </span>
+                  </dt>
+                  <dd>
+                    <span class="js-local-datetime"><%= @content.end_date %></span>
+                  </dd>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

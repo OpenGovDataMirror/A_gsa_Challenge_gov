@@ -1,0 +1,89 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Site Management", route: Routes.site_content_path(@conn, :index)},
+      %{text: "Reports"},
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          Reports
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-12 row content-sub-1">
+      <h4 class="box-title">Security Log</h4>
+      <%= link(to: Routes.reports_path(@conn, :export_security_log), class: "btn component-btn mx-3") do %>
+        <span>Export All</span>
+      <% end %>
+    </div>
+    <div class="col-md-3 content-sub-1">
+      <h5>Filter by date:</h5>
+      <div class="col-md-6 p-0">
+        <%= form_for(@changeset, Routes.reports_path(@conn, :export_security_log), [method: :get], fn f -> %>
+          <%= FormView.select_field(f, :year, collection: Enum.map(@years, &(&1)), prompt: "", label: "Year", class: "form-control", required: true) %>
+          <%= FormView.select_field(f, :month, collection: Enum.map(@months, &(&1)), prompt: "", label: "Month", class: "form-control") %>
+          <%= FormView.select_field(f, :day, collection: Enum.map(@days, &(&1)), prompt: "", label: "Day", class: "form-control") %>
+          <div class="ch-export-btn-wrapper">
+            <%= submit("Export", class: "btn component-btn report-export") %>
+          </div>
+        <% end) %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="ch-report-hr"/>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-12 row content-sub-1">
+      <h4 class="box-title">Certification Log</h4>
+      <%= link(to: Routes.reports_path(@conn, :export_certification_log), class: "btn component-btn mx-3") do %>
+        <span>Export All</span>
+      <% end %>
+    </div>
+    <div class="col-md-3 content-sub-1">
+      <h5>Filter by year certified:</h5>
+      <div class="col-md-6 p-0">
+        <%= form_for(@conn, Routes.reports_path(@conn, :export_certification_log), [method: :get], fn f -> %>
+          <%= FormView.select_field(f, :year, collection: Enum.map(@years, &(&1)), prompt: "", label: "Year", class: "form-control", required: true) %>
+          <div class="ch-export-btn-wrapper">
+            <%= submit("Export", class: "btn component-btn") %>
+          </div>
+        <% end) %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="ch-report-hr"/>
+
+<section class="content">
+  <div class="row">
+  <div class="col-md-5">
+    <div class="dap-file-upload content-sub-1">
+      <h4 class="box-title mb-5">Upload site analytics reports</h4>
+      <label for="dap_file_name" class="control-label">File name (optional)</label>
+      <input class="dap_file_name form-control" type="text">
+      <br/>
+      <input class="dap_report_file form-file-control" type="file">
+      <div class="dap_report_upload btn btn-primary">Upload file</div>
+      <div class="dap_report_upload_error invalid-feedback">File must be a .pdf, .txt, .csv, .jpg, .png, or .tiff</div>
+      <small class="form-text text-muted font-italic">Allowed file types: .pdf, .txt, .csv, .jpg, .png, or .tiff</small>
+
+      <div class="dap_report_loading"></div>
+
+      <div class="dap_uploaded_report">
+        View all reports currently on display <%= link("here", to: Routes.analytics_path(@conn, :index))%>
+      </div>
+    </div>
+   </div>
+  </div>
+</section>

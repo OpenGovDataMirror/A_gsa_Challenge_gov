@@ -1,0 +1,17 @@
+<h4>How to Enter</h4>
+<p class="ms-2 mb-0 text-muted form__note"><em>listed per phase</em></p>
+<p class="ms-2 text-muted">Provide any specific instructions or entry guidelines your solvers need to know, including any registration requirements.</p>
+<p class="form__note"><span class="form__note--red">*</span>Required field</p>
+
+<%= inputs_for(@form, :phases, fn ff -> %>
+  <div class="col">
+    <label><%= "Entry details - phase #{ff.index + 1}: #{ff.data.title}" %> <span class="required">*</span></label>
+    <%= FormView.rt_textarea_field(ff, :how_to_enter) %>
+  </div>
+  <br/>
+<% end) %>
+
+<div class="col">
+  <%= FormView.text_field(@form, :how_to_enter_link, label: "External Submission Site - Enter external website link (optional)") %>
+</div>
+<p class="ms-2 text-muted"><b>Note:</b> Only enter a website link here if you’re collecting submissions via an external website. If collecting submissions via the Challenge.Gov platform, leave this field blank.</p>

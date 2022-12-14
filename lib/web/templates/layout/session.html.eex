@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%= render("_head.html", assigns) %>
+
+  <body>
+    <div class="main-wrapper">
+      <%= render("_header.html", assigns) %>
+
+      <div class="main container-fluid">
+        <div class="content-area">
+          <%= if flash = get_flash(@conn, :info) do %>
+            <div class="alert alert-primary" role="alert">
+              <%= flash %>
+            </div>
+          <% end %>
+          <%= if flash = get_flash(@conn, :error) do %>
+            <div class="alert alert-danger" role="alert">
+              <%= flash %>
+            </div>
+          <% end %>
+
+          <%= @inner_content %>
+        </div>
+      </div>
+
+      <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    </div>
+  </body>
+</html>

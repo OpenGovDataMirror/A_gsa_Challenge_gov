@@ -1,0 +1,27 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Challenges", route: Routes.challenge_path(@conn, :index)},
+      %{text: @challenge.title, route: Routes.challenge_path(@conn, :show, @challenge.id)},
+      %{text: "Manage Winners Phase Selection", route: Routes.phase_winner_path(@conn, :index, @challenge.id)},
+      %{text: "#{@phase.title} Winners", route: Routes.phase_winner_path(@conn, :show, @phase.id)},
+      %{text: "Edit"}
+    ])%>
+  </div>
+</div>
+
+<div class="content phase-winners">
+  <div class="container-fluid">
+    <%= render_title(@challenge, @phase) %>
+
+    <%= render Web.PhaseWinnerView, "_form.html", 
+      conn: @conn, 
+      changeset: @changeset, 
+      action: @action,
+      challenge: @challenge,
+      phase: @phase,
+      upload_error: @upload_error
+    %>
+  </div>
+</div>

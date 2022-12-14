@@ -1,0 +1,29 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <%= SharedView.render_breadcrumbs([
+      %{text: "Home", route: Routes.dashboard_path(@conn, :index)},
+      %{text: "Site Management", route: Routes.site_content_path(@conn, :index)},
+      %{text: @content.section, route: Routes.site_content_path(@conn, :show, @content.section)},
+      %{text: "Edit"}
+    ])%>
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">
+          Edit Content: <%= @content.section %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">        
+          <%= render Web.SiteContentView, "_form.html", conn: @conn, changeset: @changeset, data: @changeset.data, section: @content.section, path: Routes.site_content_path(@conn, :update, @content.section) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

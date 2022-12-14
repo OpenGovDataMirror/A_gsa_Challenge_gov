@@ -1,0 +1,15 @@
+<section class="follow-challenge">
+  <div class="card col-md-6 mx-auto">
+    <div class="card-body justify-content-center">
+      <h4 class="text-center mb-5">You are saving the following challenge to your saved list.</h4>
+      <div class="text-center mb-5">
+        <%= ChallengeView.logo_img(@challenge, class: "mx-auto") %>
+      </div>
+      <h4 class="text-center mb-5"><%= @challenge.title %></h4>
+      <div>
+        <%= link "Cancel", to: ChallengeView.public_details_url(@challenge), class: "btn btn-link" %>
+        <%= link "Finish", to: Routes.challenge_saved_challenge_path(@conn, :create, @challenge.id), method: "post", class: "btn btn-primary float-right" %>
+      </div>
+    </div>
+  </div>
+</section>
